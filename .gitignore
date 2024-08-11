@@ -1,0 +1,18 @@
+# !/usr/bin/env
+# -*- coding: utf-8 -*-
+# DizzyCalc
+
+
+# author: OTechCup
+# copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
+# credits: ["Mr. O"]
+# version: Beta v0.1.0
+# maintainer: OTechCup
+# email: support@exfac.info
+
+
+# ignore file/directory
+node_modules/*
+
+
+# un-ignore file/directory
