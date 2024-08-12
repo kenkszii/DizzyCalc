@@ -1,23 +1,8 @@
-/**
- *!/usr/bin/env node
- * -*- coding: utf-8 -*-
- * DizzyCalc
- */
-
-/**
- * author: OTechCup
- * copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
- * credits: ["Mr. O"]
- * version: Beta v0.1.0
- * maintainer: OTechCup
- * email: support@exfac.info
- */
-
-// import modules
 import { useState } from "react";
 
 function Dashboard() {
   const [value, setValue] = useState("");
+  const [points, setPoints] = useState(0);
 
   function handleClick(digits) {
     let newDigits;
@@ -49,6 +34,18 @@ function Dashboard() {
       case "9":
         newDigits = "5";
         break;
+      case "-":
+        newDigits = "*";
+        break;
+      case "+":
+        newDigits = "-";
+        break;
+      case "*":
+        newDigits = "/";
+        break;
+      case "/":
+        newDigits = "+";
+        break;
       default:
         newDigits = digits;
     }
@@ -56,15 +53,25 @@ function Dashboard() {
   }
 
   function clear() {
-    setValue("");
-  }
-
-  function calculate() {
+    // calculate function
     try {
       setValue(eval(value)); // Using eval is not recommended for production code due to security risks.
     } catch (error) {
       setValue("Error");
     }
+  }
+  
+  function backspace() {
+    //Clear function
+    setPoints(0);
+    setValue("");
+  }
+  
+  function calculate() {
+    // backspace function
+    setPoints(points - 1);
+    const newValue = value.slice(0, -1);
+    setValue(newValue);
   }
 
   return (
@@ -84,6 +91,10 @@ function Dashboard() {
 
         <span className="num clear" onClick={clear}>
           <i>C</i>
+        </span>
+
+        <span className="num" onClick={backspace}>
+          <i>←</i>
         </span>
 
         <span className="num" onClick={() => handleClick("/")}>
