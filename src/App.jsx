@@ -18,6 +18,8 @@
 // import modules
 import { Routes, Route } from "react-router-dom";
 
+import "./static/vendors/ccss/style.css";
+
 import Dashboard from "./components/account/pages/Dashboard.jsx";
 
 
