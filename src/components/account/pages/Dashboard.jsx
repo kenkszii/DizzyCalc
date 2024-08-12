@@ -3,59 +3,47 @@ import { useState } from "react";
 function Dashboard() {
   const [value, setValue] = useState("");
   const [points, setPoints] = useState(0);
+  const [mapping, setMapping] = useState(generateMapping());
 
-  function handleClick(digits) {
-    let newDigits;
-    switch (digits) {
-      case "1":
-        newDigits = "4";
-        break;
-      case "2":
-        newDigits = "7";
-        break;
-      case "3":
-        newDigits = "8";
-        break;
-      case "4":
-        newDigits = "9";
-        break;
-      case "5":
-        newDigits = "3";
-        break;
-      case "6":
-        newDigits = "2";
-        break;
-      case "7":
-        newDigits = "1";
-        break;
-      case "8":
-        newDigits = "6";
-        break;
-      case "9":
-        newDigits = "5";
-        break;
-      case "-":
-        newDigits = "*";
-        break;
-      case "+":
-        newDigits = "-";
-        break;
-      case "*":
-        newDigits = "/";
-        break;
-      case "/":
-        newDigits = "+";
-        break;
-      default:
-        newDigits = digits;
-    }
-    setValue(value + newDigits);
+  function generateMapping() {
+    return {
+      1: randomDigit(),
+      2: randomDigit(),
+      3: randomDigit(),
+      4: randomDigit(),
+      5: randomDigit(),
+      6: randomDigit(),
+      7: randomDigit(),
+      8: randomDigit(),
+      9: randomDigit(),
+      0: randomDigit(),
+      "+": randomOperation(),
+      "-": randomOperation(),
+      "*": randomOperation(),
+      "/": randomOperation(),
+    };
   }
 
+  function randomDigit() {
+    const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "00"];
+    return digits[Math.floor(Math.random() * digits.length)];
+  }
+
+  function randomOperation() {
+    const operations = ["+", "-", "*", "/"];
+    return operations[Math.floor(Math.random() * operations.length)];
+  }
+
+  function handleClick(digitOrOperation) {
+    setValue(value + (mapping[digitOrOperation] || digitOrOperation));
+  }
+  
   function clear() {
     // calculate function
     try {
-      setValue(eval(value)); // Using eval is not recommended for production code due to security risks.
+      const result = eval(value);
+      setPoints(points + value.length);
+      setValue(result.toString());
     } catch (error) {
       setValue("Error");
     }
@@ -63,15 +51,17 @@ function Dashboard() {
   
   function backspace() {
     //Clear function
-    setPoints(0);
+
+    setMapping(generateMapping());
     setValue("");
+    setPoints(0);
   }
   
   function calculate() {
     // backspace function
+    setMapping(generateMapping());
     setPoints(points - 1);
-    const newValue = value.slice(0, -1);
-    setValue(newValue);
+    setValue(value.slice(0, -1));
   }
 
   return (
