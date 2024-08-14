@@ -37,11 +37,18 @@ function Dashboard() {
   };
 
 
-  function calculate() {
-    try {
-      setValue(eval(value));  // Using eval is not recommended for production code due to security risks.
-    } catch (error) {
-      setValue("Error");
+  function calculate(element) {
+    if (!intent && value) {
+      setIntent(value);
+      clear();
+
+      element.target.innerHTML = "<i>=</i>";
+    } else if (value) {
+      try {
+        setValue(eval(value));  // Using eval is not recommended for production code due to security risks.
+      } catch (error) {
+        setValue("Error");
+      };
     };
   };
 
