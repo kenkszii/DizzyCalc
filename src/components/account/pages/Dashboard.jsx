@@ -56,13 +56,13 @@ function Dashboard() {
         <input 
           type="text" 
           className="value" 
-          readOnly 
+          readOnly
           value={value}
           name="txt" 
         />
         
         <span 
-          className="num clear" 
+          className="clear" 
           onClick={clear}
         >
           <i>
@@ -71,7 +71,7 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
+          className="operator" 
           onClick={
             function () {
               handleClick("/");
@@ -84,7 +84,7 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
+          className="operator" 
           onClick={
             function () {
               handleClick("*");
@@ -95,9 +95,17 @@ function Dashboard() {
             *
           </i>
         </span>
+
+        <span 
+          className="action" 
+          onClick={clear}
+        >
+          <i>
+            ←
+          </i>
+        </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("7");
@@ -110,7 +118,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("8");
@@ -123,7 +130,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("9");
@@ -136,7 +142,7 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
+          className="operator"
           onClick={
             function () {
               handleClick("-");
@@ -149,7 +155,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("4");
@@ -162,7 +167,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("5");
@@ -175,7 +179,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("6");
@@ -188,7 +191,7 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num plus" 
+          className="plus operator" 
           onClick={
             function () {
               handleClick("+");
@@ -201,7 +204,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("1");
@@ -214,7 +216,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("2");
@@ -227,7 +228,6 @@ function Dashboard() {
         </span>
 
         <span 
-          className="num" 
           onClick={
             function () {
               handleClick("3");
@@ -240,7 +240,19 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
+          className="action" 
+          onClick={
+            function () {
+              handleClick("");
+            }
+          }
+        >
+          <i>
+            Menu
+          </i>
+        </span>
+        
+        <span 
           onClick={
             function () {
               handleClick("0");
@@ -253,20 +265,6 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num" 
-          onClick={
-            function () {
-              handleClick("00");
-            }
-          }
-        >
-          <i>
-            00
-          </i>
-        </span>
-        
-        <span 
-          className="num" 
           onClick={
             function () {
               handleClick(".");
@@ -279,11 +277,11 @@ function Dashboard() {
         </span>
         
         <span 
-          className="num equal" 
+          className="equal" 
           onClick={calculate}
         >
           <i>
-            =
+            GO
           </i>
         </span>
       </form>
