@@ -1,0 +1,73 @@
+/**
+*!/usr/bin/env node
+* -*- coding: utf-8 -*-
+* DizzyCalc
+*/
+
+
+/**
+* author: OTechCup
+* copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
+* credits: ["Mr. O"]
+* version: Beta v0.1.0
+* maintainer: OTechCup
+* email: support@exfac.info
+*/
+
+
+// import modules
+@import url(
+  "https://fonts.googleapis.com/css?family=Titillium+Web:400,900&display=swap"
+);
+
+
+.container {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    width: 96%;
+    margin-bottom: 20px;
+    left: 8px;
+    position: inherit;
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      font-family: "Titillium Web", sans-serif !important;
+    }
+
+    .timer {
+      color: #fff;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  
+  .calculator {
+    .status-bar {
+      top: 2px;
+      position: absolute;
+      z-index: 1;
+      left: 60px;
+      display: flex;
+
+      p {
+        margin-right: 20px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+    
+    .intent-prompt {
+      top: 80px;
+      position: absolute;
+      z-index: 1;
+      left: 20px;
+    }
+  }
+}
