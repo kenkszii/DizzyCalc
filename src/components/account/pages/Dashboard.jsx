@@ -21,6 +21,10 @@ import { useState } from "react";
 
 function Dashboard() {
   const [value, setValue] = useState("");
+  const [level, setLevel] = useState(1);
+  const [tries, setTries] = useState(20);
+  const [reward, setReward] = useState(0);
+  const [intent, setIntent] = useState("");
 
 
   function handleClick(val) {
@@ -44,6 +48,52 @@ function Dashboard() {
 
   return (
     <div className="container">
+      <div className="header">
+        <div className="logo">
+          <p style={{ marginRight: '10px' }}>DC</p>
+
+          <span className="text-magenta-rose">
+            D
+          </span>
+          
+          <span className="text-blue">
+            i
+          </span>
+          
+          <span className="text-orange">
+            z
+          </span>
+          
+          <span className="text-lime-green">
+            z
+          </span>
+          
+          <span className="text-magenta-rose">
+            y
+          </span>
+          
+          <span className="text-blue">
+            C
+          </span>
+          
+          <span className="text-orange">
+            a
+          </span>
+          
+          <span className="text-lime-green">
+            l
+          </span>
+          
+          <span className="text-magenta-rose">
+            c
+          </span>
+        </div>
+
+        <div className="timer">
+          00:00:00
+        </div>
+      </div>
+
       <form 
         name="calc" 
         className="calculator" 
@@ -53,6 +103,20 @@ function Dashboard() {
           }
         }
       >
+        <div className="status-bar">
+          <p>
+            LEVEL: {level}
+          </p>
+
+          <p>
+            TRIES: {tries}
+          </p>
+
+          <p>
+            REWARD: {reward.toFixed(3)}p
+          </p>
+        </div>
+
         <input 
           type="text" 
           className="value" 
@@ -60,6 +124,18 @@ function Dashboard() {
           value={value}
           name="txt" 
         />
+
+        <p className="intent-prompt">
+          
+
+          {
+            intent
+              ? `Intent: ${intent}`
+              : "What's your intent?"
+          }
+          
+
+        </p>
         
         <span 
           className="clear" 
