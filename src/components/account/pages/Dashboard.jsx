@@ -18,6 +18,8 @@
 // import modules
 import { useState } from "react";
 
+import "../../../static/assets/scss/account/pages/Dashboard.scss";
+
 
 function Dashboard() {
   const [value, setValue] = useState("");
