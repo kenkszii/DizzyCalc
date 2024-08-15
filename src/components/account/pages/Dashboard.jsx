@@ -1,69 +1,128 @@
+/**
+ *!/usr/bin/env node
+ * -*- coding: utf-8 -*-
+ * DizzyCalc
+ */
+
+/**
+ * author: OTechCup
+ * copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
+ * credits: ["Mr. O", "Bridget"]
+ * version: Beta v0.1.0
+ * maintainer: OTechCup
+ * email: support@exfac.info
+ */
+
+// import modules
+
 import { useState } from "react";
 
 function Dashboard() {
   const [value, setValue] = useState("");
   const [points, setPoints] = useState(0);
-  const [mapping, setMapping] = useState(generateMapping());
+  const [mapping, setMapping] = useState(null);
+  const [isRandom, setIsRandom] = useState(false);
 
   function generateMapping() {
+    const digits = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "00",
+      ".",
+    ];
+    const operations = ["+", "-", "*", "/"];
+    const actionButton = ["clear", "backspace", "calculate"];
+    const randomDigits = randomArray(digits);
+    const randomOperations = randomArray(operations);
+    const randomActionButton = randomArray(actionButton);
+
     return {
-      1: randomDigit(),
-      2: randomDigit(),
-      3: randomDigit(),
-      4: randomDigit(),
-      5: randomDigit(),
-      6: randomDigit(),
-      7: randomDigit(),
-      8: randomDigit(),
-      9: randomDigit(),
-      0: randomDigit(),
-      "+": randomOperation(),
-      "-": randomOperation(),
-      "*": randomOperation(),
-      "/": randomOperation(),
+      1: randomDigits[1],
+      2: randomDigits[2],
+      3: randomDigits[3],
+      4: randomDigits[4],
+      5: randomDigits[5],
+      6: randomDigits[6],
+      7: randomDigits[7],
+      8: randomDigits[8],
+      9: randomDigits[9],
+      0: randomDigits[0],
+      ".": randomDigits[10],
+      "00": randomDigits[11],
+      "+": randomOperations[0],
+      "-": randomOperations[1],
+      "*": randomOperations[2],
+      "/": randomOperations[3],
+      clear: randomActionButton[0],
+      calculate: randomActionButton[1],
+      backspace: randomActionButton[2],
     };
   }
 
-  function randomDigit() {
-    const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "00"];
-    return digits[Math.floor(Math.random() * digits.length)];
+  function randomArray(array) {
+    return array.sort(() => Math.random() - 0.5);
   }
 
-  function randomOperation() {
-    const operations = ["+", "-", "*", "/"];
-    return operations[Math.floor(Math.random() * operations.length)];
-  }
+  // function handleClick(digitOrOperation) {
+  //   if (!isRandom) {
+  //     setValue(value + digitOrOperation);
+  //   } else {
+  //     setValue(value + (mapping[digitOrOperation] || digitOrOperation));
+  //   }
+  // }
 
   function handleClick(digitOrOperation) {
-    setValue(value + (mapping[digitOrOperation] || digitOrOperation));
-  }
-  
-  function clear() {
-    // calculate function
-    try {
-      const result = eval(value);
-      setPoints(points + value.length);
-      setValue(result.toString());
-    } catch (error) {
-      setValue("Error");
+    const mappedValue = isRandom
+      ? mapping[digitOrOperation] || digitOrOperation
+      : digitOrOperation;
+
+    if (mappedValue === "clear") {
+      clear();
+    } else if (mappedValue === "backspace") {
+      backspace();
+    } else if (mappedValue === "calculate") {
+      calculate();
+    } else {
+      setValue(value + mappedValue);
     }
   }
-  
-  function backspace() {
-    //Clear function
 
-    setMapping(generateMapping());
+
+  function clear() {
     setValue("");
     setPoints(0);
   }
-  
-  function calculate() {
-    // backspace function
-    setMapping(generateMapping());
+
+  function backspace() {
     setPoints(points - 1);
     setValue(value.slice(0, -1));
   }
 
+  function calculate() {
+    if (!isRandom) {
+      setMapping(generateMapping());
+      setIsRandom(true);
+      setValue("");
+    } else {
+      try {
+        const result = eval(value);
+        setPoints(points + value.length);
+        setValue(result.toString());
+        setMapping(generateMapping());
+      } catch (error) {
+        setValue("Error");
+         setMapping(generateMapping());
+      }
+    }
+  }
   return (
     <div className="container">
       <form
@@ -79,11 +138,11 @@ function Dashboard() {
           name="txt"
         />
 
-        <span className="num clear" onClick={clear}>
+        <span className="num clear" onClick={() => handleClick("clear")}>
           <i>C</i>
         </span>
 
-        <span className="num" onClick={backspace}>
+        <span className="num" onClick={() => handleClick("backspace")}>
           <i>←</i>
         </span>
 
@@ -151,8 +210,8 @@ function Dashboard() {
           <i>.</i>
         </span>
 
-        <span className="num equal" onClick={calculate}>
-          <i>=</i>
+        <span className="num equal" onClick={() => handleClick("calculate")}>
+          <i>{isRandom ? "=" : "Go"}</i>
         </span>
       </form>
     </div>
