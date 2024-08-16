@@ -8,7 +8,7 @@
 /**
 * author: OTechCup
 * copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
-* credits: ["Mr. O", "kenkszii"]
+* credits: ["Mr. O", "kenkszii", "Bridget"]
 * version: Beta v0.1.0
 * maintainer: OTechCup
 * email: support@exfac.info
@@ -29,31 +29,102 @@ function Dashboard() {
   const [intent, setIntent] = useState("");
   const [timer, setTimer] = useState("00:05:00");
   const timerIntervalRef = useRef(null);
+  const [mapping, setMapping] = useState(null);
+  const [isRandom, setIsRandom] = useState(false);
+
+  function generateMapping() {
+    const digits = [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "00",
+      ".",
+    ];
+    const operations = ["+", "-", "*", "/"];
+    const actionButton = ["clear", "backspace", "calculate"];
+    const randomDigits = randomArray(digits);
+    const randomOperations = randomArray(operations);
+    const randomActionButton = randomArray(actionButton);
+
+    return {
+      1: randomDigits[1],
+      2: randomDigits[2],
+      3: randomDigits[3],
+      4: randomDigits[4],
+      5: randomDigits[5],
+      6: randomDigits[6],
+      7: randomDigits[7],
+      8: randomDigits[8],
+      9: randomDigits[9],
+      0: randomDigits[0],
+      ".": randomDigits[10],
+      "00": randomDigits[11],
+      "+": randomOperations[0],
+      "-": randomOperations[1],
+      "*": randomOperations[2],
+      "/": randomOperations[3],
+      clear: randomActionButton[0],
+      calculate: randomActionButton[1],
+      backspace: randomActionButton[2],
+    };
+  }
+
+  function randomArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
 
 
-  function handleClick(val) {
-    setValue(value + val);
-  };
+  function handleClick(digitOrOperation) {
+    const mappedValue = isRandom
+      ? mapping[digitOrOperation] || digitOrOperation
+      : digitOrOperation;
+
+    if (mappedValue === "clear") {
+      clear();
+    } else if (mappedValue === "backspace") {
+      backspace();
+    } else if (mappedValue === "calculate") {
+      calculate();
+    } else {
+      setValue(value + mappedValue);
+    }
+  }
 
 
   function clear() {
     setValue("");
   };
 
+  
+  function backspace() {
+    setValue(value.slice(0, -1));
+  }
 
   function calculate(element) {
-    if (!intent && value) {
+    if (!intent && !isRandom) {
       setIntent(value);
       clear();
       startTimer();
-
+      setMapping(generateMapping());
+      setIsRandom(true);
       element.target.innerHTML = "<i>=</i>";
     } else if (value) {
       try {
-        setValue(eval(value));  // Using eval is not recommended for production code due to security risks.
+        setValue(eval(value)); // Using eval is not recommended for production code due to security risks.
+        const result = eval(value); // Using eval is not recommended for production code due to security risks.
+        setValue(result.toString());
+        setMapping(generateMapping());
       } catch (error) {
         setValue("Error");
-      };
+        setMapping(generateMapping());
+      }
     };
   };
 
@@ -219,7 +290,7 @@ function Dashboard() {
 
         <span 
           className="action" 
-          onClick={clear}
+          onClick={backspace}
         >
           <i>
             ←
