@@ -20,7 +20,7 @@ import { Routes, Route } from "react-router-dom";
 
 import "./static/vendors/ccss/style.css";
 
-import Dashboard from "./components/account/pages/Dashboard.jsx";
+import  CountdownTimer from "./components/account/pages/Dashboard.jsx";
 
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
 		<Routes>
 			<Route 
 				path="/" 
-				element={<Dashboard />}
+				element={< CountdownTimer />}
 			/>
 		</Routes>
 	);
