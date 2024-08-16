@@ -94,6 +94,15 @@ function Dashboard() {
       calculate();
     } else {
       setValue(value + mappedValue);
+
+      if (intent){
+        if (value.includes(mappedValue)) {
+          setReward(reward + 0.010);
+        } else {
+          setTries(tries - 1);
+          setReward(reward - 0.050);
+        };
+      };
     }
   }
 
