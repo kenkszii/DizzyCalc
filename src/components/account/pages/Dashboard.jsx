@@ -8,7 +8,7 @@
 /**
 * author: OTechCup
 * copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
-* credits: ["Mr. O"]
+* credits: ["Mr. O, kenkszii"]
 * version: Beta v0.1.0
 * maintainer: OTechCup
 * email: support@exfac.info
@@ -16,12 +16,48 @@
 
 
 // import modules
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
 
 import "../../../static/assets/scss/account/pages/Dashboard.scss";
 
 
-function Dashboard() {
+function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
+  const [minutes, setMinutes] = useState(initialMinutes);
+  const [seconds, setSeconds] = useState(initialSeconds);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+
+    if (isActive && (minutes > 0 || seconds > 0)) {
+      interval = setInterval(() => {
+        if (seconds === 0) {
+          if (minutes > 0) {
+            setMinutes((prevMinutes) => prevMinutes - 1);
+            setSeconds(59);
+          }
+        } else {
+          setSeconds((prevSeconds) => prevSeconds - 1);
+        }
+      }, 1000);
+    } else if (!isActive && seconds !== 0) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isActive, minutes, seconds]);
+
+  function startTimer () {
+    setIsActive(true);
+  };
+
+
+  // function resetTimer () {
+  //   setMinutes(initialMinutes);
+  //   setSeconds(initialSeconds);  // reset timer function.
+  //   setIsActive(false);
+  // };
+
   const [value, setValue] = useState("");
   const [level, setLevel] = useState(1);
   const [tries, setTries] = useState(20);
@@ -36,6 +72,12 @@ function Dashboard() {
 
   function clear() {
     setValue("");
+  };
+
+  function handlDoubleClick () {
+    startTimer();
+    calculate();
+    
   };
 
 
@@ -99,7 +141,8 @@ function Dashboard() {
         </div>
 
         <div className="timer">
-          00:00:00
+        <span>{minutes < 10 ? `0${minutes}` : minutes}</span>:
+        <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
         </div>
       </div>
 
@@ -363,8 +406,9 @@ function Dashboard() {
         
         <span 
           className="equal" 
-          onClick={calculate}
+          onClick= {handlDoubleClick}
         >
+          
           <i>
             GO
           </i>
@@ -373,6 +417,7 @@ function Dashboard() {
     </div>
   );
 };
+
 
 
 export default Dashboard;
