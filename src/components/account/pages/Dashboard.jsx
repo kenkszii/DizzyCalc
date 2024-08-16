@@ -166,7 +166,11 @@ function Dashboard() {
     <div className="container">
       <div className="header">
         <div className="logo">
-          <p style={{ marginRight: '10px' }}>DC</p>
+          <img
+            src="/static/assets/imgs/favicon/android-chrome-512x512.png"
+            alt="dizzycalc-icon"
+            style={{ width: "50px" }}
+          />
 
           <span className="text-magenta-rose">
             D
