@@ -8,7 +8,7 @@
 /**
 * author: OTechCup
 * copyright: &copy; 2024 - new Date().getFullYear() All Rights Reserved | Exfac
-* credits: ["Mr. O, kenkszii"]
+* credits: ["Mr. O", "kenkszii"]
 * version: Beta v0.1.0
 * maintainer: OTechCup
 * email: support@exfac.info
@@ -16,53 +16,19 @@
 
 
 // import modules
-import React, { useState, useEffect } from 'react';
+import { useState, useRef } from "react";
 
 import "../../../static/assets/scss/account/pages/Dashboard.scss";
 
 
-function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
-  const [minutes, setMinutes] = useState(initialMinutes);
-  const [seconds, setSeconds] = useState(initialSeconds);
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    let interval = null;
-
-    if (isActive && (minutes > 0 || seconds > 0)) {
-      interval = setInterval(() => {
-        if (seconds === 0) {
-          if (minutes > 0) {
-            setMinutes((prevMinutes) => prevMinutes - 1);
-            setSeconds(59);
-          }
-        } else {
-          setSeconds((prevSeconds) => prevSeconds - 1);
-        }
-      }, 1000);
-    } else if (!isActive && seconds !== 0) {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [isActive, minutes, seconds]);
-
-  function startTimer () {
-    setIsActive(true);
-  };
-
-
-  // function resetTimer () {
-  //   setMinutes(initialMinutes);
-  //   setSeconds(initialSeconds);  // reset timer function.
-  //   setIsActive(false);
-  // };
-
+function Dashboard() {
   const [value, setValue] = useState("");
   const [level, setLevel] = useState(1);
   const [tries, setTries] = useState(20);
   const [reward, setReward] = useState(0);
   const [intent, setIntent] = useState("");
+  const [timer, setTimer] = useState("00:05:00");
+  const timerIntervalRef = useRef(null);
 
 
   function handleClick(val) {
@@ -74,17 +40,12 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
     setValue("");
   };
 
-  function handlDoubleClick () {
-    startTimer();
-    calculate();
-    
-  };
-
 
   function calculate(element) {
     if (!intent && value) {
       setIntent(value);
       clear();
+      startTimer();
 
       element.target.innerHTML = "<i>=</i>";
     } else if (value) {
@@ -94,6 +55,39 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
         setValue("Error");
       };
     };
+  };
+
+
+  function stopTimer() {
+    clearInterval(timerIntervalRef.current);
+  };
+
+
+  function startTimer() {
+    const [hours, minutes, seconds] = timer.split(":").map(Number);
+
+    let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+    timerIntervalRef.current = setInterval(
+      function () {
+        if (totalSeconds <= 0) {
+          stopTimer();
+
+          return;
+        };
+
+        totalSeconds -= 1;
+        
+        const h = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+        const m = (
+          String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0")
+        );
+        const s = String(totalSeconds % 60).padStart(2, "0");
+
+        setTimer(`${h}:${m}:${s}`);
+      },
+      1000,
+    );
   };
 
 
@@ -141,8 +135,7 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
         </div>
 
         <div className="timer">
-        <span>{minutes < 10 ? `0${minutes}` : minutes}</span>:
-        <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
+          {timer}
         </div>
       </div>
 
@@ -174,7 +167,7 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
           className="value" 
           readOnly
           value={value}
-          name="txt" 
+          name="txt"
         />
 
         <p className="intent-prompt">
@@ -371,7 +364,7 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
           className="action" 
           onClick={
             function () {
-              handleClick("");
+              handleClick("Coming soon...");
             }
           }
         >
@@ -406,9 +399,8 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
         
         <span 
           className="equal" 
-          onClick= {handlDoubleClick}
+          onClick={calculate}
         >
-          
           <i>
             GO
           </i>
@@ -417,7 +409,6 @@ function Dashboard( { initialMinutes = 1, initialSeconds = 0 }) {
     </div>
   );
 };
-
 
 
 export default Dashboard;
