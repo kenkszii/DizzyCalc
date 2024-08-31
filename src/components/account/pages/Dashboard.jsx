@@ -17,6 +17,7 @@
 
 // import modules
 import { useState, useRef } from "react";
+import { evaluate } from "mathjs";
 
 import "../../../static/assets/scss/account/pages/Dashboard.scss";
 
@@ -32,6 +33,12 @@ function Dashboard() {
   const [mapping, setMapping] = useState(null);
   const [isRandom, setIsRandom] = useState(false);
 
+
+  function randomArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+  };
+
+
   function generateMapping() {
     const digits = [
       "0",
@@ -44,11 +51,10 @@ function Dashboard() {
       "7",
       "8",
       "9",
-      "00",
       ".",
     ];
     const operations = ["+", "-", "*", "/"];
-    const actionButton = ["clear", "backspace", "calculate"];
+    const actionButton = ["clear", "backspace", "equality"];
     const randomDigits = randomArray(digits);
     const randomOperations = randomArray(operations);
     const randomActionButton = randomArray(actionButton);
@@ -65,32 +71,29 @@ function Dashboard() {
       9: randomDigits[9],
       0: randomDigits[0],
       ".": randomDigits[10],
-      "00": randomDigits[11],
       "+": randomOperations[0],
       "-": randomOperations[1],
       "*": randomOperations[2],
       "/": randomOperations[3],
       clear: randomActionButton[0],
-      calculate: randomActionButton[1],
+      equality: randomActionButton[1],
       backspace: randomActionButton[2],
     };
-  }
-
-  function randomArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-  }
+  };
 
 
   function handleClick(digitOrOperation) {
-    const mappedValue = isRandom
-      ? mapping[digitOrOperation] || digitOrOperation
-      : digitOrOperation;
+    const mappedValue = (
+      isRandom
+        ? mapping[digitOrOperation] || digitOrOperation
+        : digitOrOperation
+    );
 
     if (mappedValue === "clear") {
       clear();
     } else if (mappedValue === "backspace") {
       backspace();
-    } else if (mappedValue === "calculate") {
+    } else if (mappedValue === "equality") {
       calculate();
     } else {
       setValue(value + mappedValue);
@@ -103,8 +106,8 @@ function Dashboard() {
           setReward(reward - 0.050);
         };
       };
-    }
-  }
+    };
+  };
 
 
   function clear() {
@@ -114,26 +117,26 @@ function Dashboard() {
   
   function backspace() {
     setValue(value.slice(0, -1));
-  }
+  };
+
 
   function calculate(element) {
-    if (!intent && !isRandom) {
+    if (!intent && !isRandom && value) {
       setIntent(value);
       clear();
       startTimer();
       setMapping(generateMapping());
       setIsRandom(true);
+
       element.target.innerHTML = "<i>=</i>";
     } else if (value) {
       try {
-        setValue(eval(value)); // Using eval is not recommended for production code due to security risks.
-        const result = eval(value); // Using eval is not recommended for production code due to security risks.
-        setValue(result.toString());
+        setValue(evaluate(value).toString());
         setMapping(generateMapping());
       } catch (error) {
         setValue("Error");
         setMapping(generateMapping());
-      }
+      };
     };
   };
 
